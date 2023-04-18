@@ -17,8 +17,8 @@ class SelectorButton extends StatelessWidget {
   final String? locale;
   final bool isEnabled;
   final bool isScrollControlled;
-
   final ValueChanged<Country?> onCountryChanged;
+  final InputBorder inputBorder;
 
   const SelectorButton({
     Key? key,
@@ -32,7 +32,9 @@ class SelectorButton extends StatelessWidget {
     required this.onCountryChanged,
     required this.isEnabled,
     required this.isScrollControlled,
-  }) : super(key: key);
+    InputBorder? inputBorder,
+  })  : inputBorder = inputBorder ?? const UnderlineInputBorder(),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +47,9 @@ class SelectorButton extends StatelessWidget {
                     country: country,
                     showFlag: selectorConfig.showFlags,
                     useEmoji: selectorConfig.useEmoji,
-                    leadingPadding: selectorConfig.leadingPadding,
                     trailingSpace: selectorConfig.trailingSpace,
                     textStyle: selectorTextStyle,
+                    inputBorder: inputBorder,
                   ),
                   value: country,
                   items: mapCountryToDropdownItem(countries),
@@ -58,14 +60,19 @@ class SelectorButton extends StatelessWidget {
                 country: country,
                 showFlag: selectorConfig.showFlags,
                 useEmoji: selectorConfig.useEmoji,
-                leadingPadding: selectorConfig.leadingPadding,
                 trailingSpace: selectorConfig.trailingSpace,
                 textStyle: selectorTextStyle,
+                inputBorder: inputBorder,
               )
         : MaterialButton(
             key: Key(TestHelper.DropdownButtonKeyValue),
             padding: EdgeInsets.zero,
             minWidth: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: inputBorder.isOutline
+                  ? (inputBorder as OutlineInputBorder).borderRadius
+                  : BorderRadius.zero
+            ),
             onPressed: countries.isNotEmpty && countries.length > 1 && isEnabled
                 ? () async {
                     Country? selected;
@@ -83,16 +90,13 @@ class SelectorButton extends StatelessWidget {
                     }
                   }
                 : null,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Item(
-                country: country,
-                showFlag: selectorConfig.showFlags,
-                useEmoji: selectorConfig.useEmoji,
-                leadingPadding: selectorConfig.leadingPadding,
-                trailingSpace: selectorConfig.trailingSpace,
-                textStyle: selectorTextStyle,
-              ),
+            child: Item(
+              country: country,
+              showFlag: selectorConfig.showFlags,
+              useEmoji: selectorConfig.useEmoji,
+              trailingSpace: selectorConfig.trailingSpace,
+              textStyle: selectorTextStyle,
+              inputBorder: inputBorder,
             ),
           );
   }
@@ -111,6 +115,7 @@ class SelectorButton extends StatelessWidget {
           textStyle: selectorTextStyle,
           withCountryNames: false,
           trailingSpace: selectorConfig.trailingSpace,
+          inputBorder: inputBorder,
         ),
       );
     }).toList();

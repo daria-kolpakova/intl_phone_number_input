@@ -127,6 +127,8 @@ class InternationalPhoneNumberInput extends StatefulWidget {
       this.countries})
       : super(key: key);
 
+  InputBorder get border => inputBorder ?? UnderlineInputBorder();
+
   @override
   State<StatefulWidget> createState() => _InputWidgetState();
 }
@@ -286,24 +288,26 @@ class _InputWidgetState extends State<InternationalPhoneNumberInput> {
   InputDecoration getInputDecoration(InputDecoration? decoration) {
     InputDecoration value = decoration ??
         InputDecoration(
-          border: widget.inputBorder ?? UnderlineInputBorder(),
+          border: widget.border,
           hintText: widget.hintText,
         );
 
     if (widget.selectorConfig.setSelectorButtonAsPrefixIcon) {
       return value.copyWith(
-          prefixIcon: SelectorButton(
-        country: country,
-        countries: countries,
-        onCountryChanged: onCountryChanged,
-        selectorConfig: widget.selectorConfig,
-        selectorTextStyle: widget.selectorTextStyle,
-        searchBoxDecoration: widget.searchBoxDecoration,
-        locale: locale,
-        isEnabled: widget.isEnabled,
-        autoFocusSearchField: widget.autoFocusSearch,
-        isScrollControlled: widget.countrySelectorScrollControlled,
-      ));
+        prefixIcon: SelectorButton(
+          country: country,
+          countries: countries,
+          onCountryChanged: onCountryChanged,
+          selectorConfig: widget.selectorConfig,
+          selectorTextStyle: widget.selectorTextStyle,
+          searchBoxDecoration: widget.searchBoxDecoration,
+          locale: locale,
+          isEnabled: widget.isEnabled,
+          autoFocusSearchField: widget.autoFocusSearch,
+          isScrollControlled: widget.countrySelectorScrollControlled,
+          inputBorder: widget.border,
+        ),
+      );
     }
 
     return value;
@@ -410,6 +414,7 @@ class _InputWidgetView
                   isEnabled: widget.isEnabled,
                   autoFocusSearchField: widget.autoFocusSearch,
                   isScrollControlled: widget.countrySelectorScrollControlled,
+                  inputBorder: widget.border,
                 ),
                 SizedBox(
                   height: state.selectorButtonBottomPadding,
