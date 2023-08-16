@@ -15,19 +15,23 @@ class PhoneNumberUtil {
   /// [normalizePhoneNumber] normalizes a string of characters representing a phone number
   /// Accepts [phoneNumber] and [isoCode]
   /// Returns [Future<String>]
-  static Future<String?> normalizePhoneNumber({required String phoneNumber, required String isoCode}) async {
-    return phoneNumber;
+  static Future<String?> normalizePhoneNumber({required String phoneNumber, required String dealCode}) async {
+    return dealCode + phoneNumber;
   }
 
   /// Accepts [phoneNumber] and [isoCode]
   /// Returns [Future<RegionInfo>] of all information available about the [phoneNumber]
-  static Future<RegionInfo> getRegionInfo({required String phoneNumber, required String isoCode}) async {
-    return RegionInfo(isoCode: isoCode);
+  static Future<RegionInfo> getRegionInfo({
+    required String phoneNumber,
+    required String isoCode,
+    required String regionPrefix,
+  }) async {
+    return RegionInfo(regionPrefix: regionPrefix, formattedPhoneNumber: phoneNumber, isoCode: isoCode);
   }
 
   /// Accepts [phoneNumber] and [isoCode]
   /// Returns [Future<PhoneNumberType>] type of phone number
-  static Future<PhoneNumberType> getNumberType({required String phoneNumber, required String isoCode}) async {
+  static Future<PhoneNumberType> getNumberType() async {
     return PhoneNumberType.MOBILE;
   }
 
@@ -35,8 +39,8 @@ class PhoneNumberUtil {
   /// Accepts [phoneNumber] and [isoCode]
   /// Returns [Future<String>]
   static Future<String?> formatAsYouType({required String phoneNumber, required String dealCode}) async {
-    for(int i = dealCode.length, j = 0; i < phoneNumber.length; i++, j++) {
-      if(j == 3 || j == 7) {
+    for (int i = dealCode.length, j = 0; i < phoneNumber.length; i++, j++) {
+      if (j == 4 || j == 8) {
         phoneNumber = phoneNumber.replaceRange(i, i + 1, ' ' + phoneNumber[i]);
       }
     }
@@ -107,4 +111,3 @@ class PhoneNumberTypeUtil {
     }
   }
 }
-
