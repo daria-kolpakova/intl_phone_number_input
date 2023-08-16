@@ -85,7 +85,7 @@ class PhoneNumber extends Equatable {
       );
       String? formattedNumber = await PhoneNumberUtil.formatAsYouType(
         phoneNumber: number.phoneNumber!,
-        isoCode: number.isoCode!,
+        dealCode: number.dialCode!,
       );
 
       return formattedNumber!.replaceAll(

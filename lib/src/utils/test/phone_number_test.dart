@@ -43,7 +43,7 @@ class PhoneNumberTest {
       );
       String? formattedNumber = await PhoneNumberUtil.formatAsYouType(
         phoneNumber: number.phoneNumber!,
-        isoCode: number.isoCode!,
+        dealCode: number.dialCode!,
       );
       return formattedNumber!.replaceAll(
         RegExp('^([\\+]?${number.dialCode}[\\s]?)'),

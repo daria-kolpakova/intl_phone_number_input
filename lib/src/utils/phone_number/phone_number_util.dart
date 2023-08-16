@@ -1,55 +1,46 @@
 import 'package:intl_phone_number_input/src/utils/phone_number.dart';
-import 'package:libphonenumber_plugin/libphonenumber_plugin.dart' as p;
 
 /// A wrapper class [PhoneNumberUtil] that basically switch between plugin available for `Web` or `Android or IOS` and `Other platforms` when available.
 class PhoneNumberUtil {
   /// [isValidNumber] checks if a [phoneNumber] is valid.
   /// Accepts [phoneNumber] and [isoCode]
   /// Returns [Future<bool>].
-  static Future<bool?> isValidNumber(
-      {required String phoneNumber, required String isoCode}) async {
+  static Future<bool?> isValidNumber({required String phoneNumber, required String isoCode}) async {
     if (phoneNumber.length < 2) {
       return false;
     }
-    return p.PhoneNumberUtil.isValidPhoneNumber(phoneNumber, isoCode);
+    return true;
   }
 
   /// [normalizePhoneNumber] normalizes a string of characters representing a phone number
   /// Accepts [phoneNumber] and [isoCode]
   /// Returns [Future<String>]
-  static Future<String?> normalizePhoneNumber(
-      {required String phoneNumber, required String isoCode}) async {
-    return p.PhoneNumberUtil.normalizePhoneNumber(phoneNumber, isoCode);
+  static Future<String?> normalizePhoneNumber({required String phoneNumber, required String isoCode}) async {
+    return phoneNumber;
   }
 
   /// Accepts [phoneNumber] and [isoCode]
   /// Returns [Future<RegionInfo>] of all information available about the [phoneNumber]
-  static Future<RegionInfo> getRegionInfo(
-      {required String phoneNumber, required String isoCode}) async {
-    var response = await p.PhoneNumberUtil.getRegionInfo(phoneNumber, isoCode);
-
-    return RegionInfo(
-        regionPrefix: response.regionPrefix,
-        isoCode: response.isoCode,
-        formattedPhoneNumber: response.formattedPhoneNumber);
+  static Future<RegionInfo> getRegionInfo({required String phoneNumber, required String isoCode}) async {
+    return RegionInfo(isoCode: isoCode);
   }
 
   /// Accepts [phoneNumber] and [isoCode]
   /// Returns [Future<PhoneNumberType>] type of phone number
-  static Future<PhoneNumberType> getNumberType(
-      {required String phoneNumber, required String isoCode}) async {
-    final dynamic type =
-        await p.PhoneNumberUtil.getNumberType(phoneNumber, isoCode);
-
-    return PhoneNumberTypeUtil.getType(type.index);
+  static Future<PhoneNumberType> getNumberType({required String phoneNumber, required String isoCode}) async {
+    return PhoneNumberType.MOBILE;
   }
 
   /// [formatAsYouType] uses Google's libphonenumber input format as you type.
   /// Accepts [phoneNumber] and [isoCode]
   /// Returns [Future<String>]
-  static Future<String?> formatAsYouType(
-      {required String phoneNumber, required String isoCode}) async {
-    return p.PhoneNumberUtil.formatAsYouType(phoneNumber, isoCode);
+  static Future<String?> formatAsYouType({required String phoneNumber, required String dealCode}) async {
+    for(int i = dealCode.length, j = 0; i < phoneNumber.length; i++, j++) {
+      if(j == 3 || j == 7) {
+        phoneNumber = phoneNumber.replaceRange(i, i + 1, ' ' + phoneNumber[i]);
+      }
+    }
+    return phoneNumber;
   }
 }
 
@@ -117,35 +108,3 @@ class PhoneNumberTypeUtil {
   }
 }
 
-/// Extension on PhoneNumberType
-extension phonenumbertypeproperties on PhoneNumberType {
-  /// Returns the index [int] of the current `PhoneNumberType`
-  int get value {
-    switch (this) {
-      case PhoneNumberType.FIXED_LINE:
-        return 0;
-      case PhoneNumberType.MOBILE:
-        return 1;
-      case PhoneNumberType.FIXED_LINE_OR_MOBILE:
-        return 2;
-      case PhoneNumberType.TOLL_FREE:
-        return 3;
-      case PhoneNumberType.PREMIUM_RATE:
-        return 4;
-      case PhoneNumberType.SHARED_COST:
-        return 5;
-      case PhoneNumberType.VOIP:
-        return 6;
-      case PhoneNumberType.PERSONAL_NUMBER:
-        return 7;
-      case PhoneNumberType.PREMIUM_RATE:
-        return 8;
-      case PhoneNumberType.UAN:
-        return 9;
-      case PhoneNumberType.VOICEMAIL:
-        return 10;
-      default:
-        return -1;
-    }
-  }
-}

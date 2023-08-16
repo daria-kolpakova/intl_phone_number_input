@@ -101,7 +101,9 @@ class AsYouTypeFormatter extends TextInputFormatter {
   Future<String?> formatAsYouType({required String input}) async {
     try {
       String? formattedPhoneNumber = await PhoneNumberUtil.formatAsYouType(
-          phoneNumber: input, isoCode: isoCode);
+        phoneNumber: input,
+        dealCode: dialCode,
+      );
       return formattedPhoneNumber;
     } on Exception {
       return '';

@@ -53,9 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {
-                formKey.currentState.validate();
-              },
+              onPressed: formKey.currentState?.validate,
               child: Text('Validate'),
             ),
             ElevatedButton(
@@ -78,13 +76,13 @@ class _MyHomePageState extends State<MyHomePage> {
     controller.text = parsableNumber;
 
     setState(() {
-      initialCountry = number.isoCode;
+      initialCountry = number.isoCode!;
     });
   }
 
   @override
   void dispose() {
-    controller?.dispose();
+    controller.dispose();
     super.dispose();
   }
 }
